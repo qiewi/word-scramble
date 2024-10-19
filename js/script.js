@@ -1,3 +1,7 @@
+const wordText = document.querySelector(".word"),
+hintText = document.querySelector(".hint span"),
+refreshBtn = document.querySelector(".refresh-word");
+
 const initGame = () => {
     let randomObj = words[Math.floor(Math.random() * words.length)];
     let wordArray = randomObj.word.split("");
@@ -5,7 +9,11 @@ const initGame = () => {
         let j = Math.floor(Math.random() * (i + 1));
         [wordArray[i], wordArray[j]] = [wordArray[j], wordArray[i]];
     }
-    console.log(wordArray, randomObj.word);
+    wordText.innerText = wordArray.join("");
+    hintText.innerText = randomObj.hint;
+    console.log(randomObj);
 }
 
 initGame();
+
+refreshBtn.addEventListener("click", initGame);
