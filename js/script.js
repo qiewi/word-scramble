@@ -1,12 +1,26 @@
 const wordText = document.querySelector(".word"),
 hintText = document.querySelector(".hint span"),
+timeText = document.querySelector(".time b"),
 inputField = document.querySelector("input"),
 refreshBtn = document.querySelector(".refresh-word"),
 checkBtn = document.querySelector(".check-word");
 
 let correctWord;
 
+const initTimer = maxTime => {
+    timer = setInterval(() => {
+        if(maxTime > 0) {
+            maxTime--;
+            return timeText.innerText = maxTime;
+        }
+        clearInterval(timer);
+        alert(`Time's out! ${correctWord.toUpperCase()} was the correct word`);
+        initGame();
+    }, 1000);
+}
+
 const initGame = () => {
+    initTimer(30);
     let randomObj = words[Math.floor(Math.random() * words.length)];
     let wordArray = randomObj.word.split("");
     for (let i = wordArray.length - 1; i > 0; i--) {
@@ -16,15 +30,18 @@ const initGame = () => {
     wordText.innerText = wordArray.join("");
     hintText.innerText = randomObj.hint;
     correctWord = randomObj.word.toLowerCase();
-    console.log(randomObj);
+    inputField.value = "";
+    inputField.setAttribute("maxlength", correctWord.length);
 }
 
 initGame();
 
 const checkWord = () => {
     let userWord = inputField.value.toLocaleLowerCase();
+    if (!userWord) return alert("Please enter a word");
     if (userWord !== correctWord) return alert(`Oops! ${userWord} is not the correct word`);
     alert(`Congratulations! ${userWord.toUpperCase()} is the correct word`);
+    initGame();
 }
 
 refreshBtn.addEventListener("click", initGame);
